@@ -1,5 +1,6 @@
 package com.nbs.app.modul4;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,12 +20,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSave, btnLoad;
     private EditText editText;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
-        getSupportActionBar().setTitle("Simple File Storage");
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Simple File Storage (Internal)");
 
         btnSave = (Button) findViewById(R.id.btnSave);
         btnLoad = (Button) findViewById(R.id.btnLoad);
@@ -68,5 +68,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void pindah(View view) {
+        startActivity(new Intent(this, External.class));
     }
 }

@@ -30,4 +30,13 @@
         android:text="Load"
         android:textColor="#FFFFFF" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorPrimary"
+        android:onClick="pindah()"
+        android:text="Load"
+        android:textColor="#FFFFFF" />
+
 </LinearLayout>
