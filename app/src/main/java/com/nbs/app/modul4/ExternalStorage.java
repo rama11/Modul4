@@ -1,49 +1,60 @@
 package com.nbs.app.modul4;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-public class MainActivity extends AppCompatActivity {
-
+public class ExternalStorage extends AppCompatActivity {
 
     static final int READ_BLOCK_SIZE = 100;
-    private Button btnSave, btnLoad, button;
+    private Button btnSave, btnLoad;
     private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle("Simple File Storage (Internal)");
+        setContentView(R.layout.activity_external_storage);
 
-        btnSave = (Button) findViewById(R.id.btnSave);
-        btnLoad = (Button) findViewById(R.id.btnLoad);
-        editText = (EditText) findViewById(R.id.editInput);
-        button = (Button) findViewById(R.id.button);
+        btnSave = (Button) findViewById(R.id.btnSave2);
+        btnLoad = (Button) findViewById(R.id.btnLoad2);
+        editText = (EditText) findViewById(R.id.editInput2);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    FileOutputStream fOut = openFileOutput("myText.txt", MODE_PRIVATE);
-                    fOut.write(editText.getText().toString().getBytes());
-                    fOut.close();
+                    File sdCard = Environment.getExternalStorageDirectory();
+                    File dir = new File(sdCard.getAbsolutePath() + "/MyFiles");
+
+                    if (!dir.exists())
+                        dir.mkdir();
+
+                    File file = new File(dir, "textfile.txt");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    OutputStreamWriter osw = new OutputStreamWriter(fOut);
+
+                    osw.write(editText.getText().toString());
+                    osw.flush();
+                    osw.close();
+
                     Toast.makeText(getBaseContext(), "File Saved Successfully", Toast.LENGTH_SHORT).show();
 
+                    editText.setText("");
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                editText.setText("");
+
             }
         });
 
@@ -51,7 +62,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    FileInputStream fIn = openFileInput("myText.txt");
+                    File sdCard = Environment.getExternalStorageDirectory();
+                    File dir = new File(sdCard.getAbsolutePath() + "/MyFiles");
+                    File file = new File(dir, "textFile.txt");
+
+                    FileInputStream fIn = new FileInputStream(file);
                     InputStreamReader isr = new InputStreamReader(fIn);
                     char[] inputBuffer = new char[READ_BLOCK_SIZE];
                     String s = "";
@@ -70,13 +85,5 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ExternalStorage.class);
-                startActivity(intent);
-            }
-        });
     }
-
 }
